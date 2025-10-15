@@ -15,13 +15,16 @@ public class Sala {
     private String nome;
     @Column(nullable = false)
     private Integer capacidade;
+    private Boolean ativo;
 
     public Sala() {
     }
 
+
     public Sala(String nome, Integer capacidade) {
         this.nome = nome;
         this.capacidade = capacidade;
+        this.ativo = true;
     }
 
     public Long getId() {
@@ -48,6 +51,15 @@ public class Sala {
 
     public Sala setCapacidade(Integer capacidade) {
         this.capacidade = capacidade;
+        return this;
+    }
+
+    public Boolean isAtivo() {
+        return ativo;
+    }
+
+    public Sala setAtivo(Boolean ativo) {
+        this.ativo = ativo;
         return this;
     }
 
