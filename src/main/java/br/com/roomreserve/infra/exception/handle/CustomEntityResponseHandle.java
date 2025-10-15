@@ -2,6 +2,7 @@ package br.com.roomreserve.infra.exception.handle;
 
 import br.com.roomreserve.infra.exception.ExceptionResponse;
 import br.com.roomreserve.infra.exception.ReservaInvalidaException;
+import br.com.roomreserve.infra.exception.SalaInvalidaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,17 @@ public class CustomEntityResponseHandle {
 
     @ExceptionHandler(ReservaInvalidaException.class)
     public ResponseEntity<ExceptionResponse> reservaInvalidaException(Exception ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SalaInvalidaException.class)
+    public ResponseEntity<ExceptionResponse> salaInvalidaException(Exception ex, WebRequest request) {
         ExceptionResponse response = new ExceptionResponse(
                 new Date(),
                 ex.getMessage(),

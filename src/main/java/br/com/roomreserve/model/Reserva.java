@@ -1,5 +1,6 @@
 package br.com.roomreserve.model;
 
+import br.com.roomreserve.dto.request.ReservaRequestDTO;
 import br.com.roomreserve.model.enums.Status;
 import jakarta.persistence.*;
 
@@ -36,13 +37,12 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(Long id, Usuario usuario, Sala sala, LocalDate inicio, LocalDate fim, Status status) {
-        this.id = id;
-        this.usuario = usuario;
-        this.sala = sala;
-        this.inicio = inicio;
-        this.fim = fim;
-        this.status = status;
+
+    public Reserva(ReservaRequestDTO requestDTO) {
+        this.inicio = requestDTO.inicio();
+        this.fim = requestDTO.fim();
+        this.status = requestDTO.status();
+
     }
 
     public Long getId() {

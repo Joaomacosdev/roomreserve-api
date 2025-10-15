@@ -1,5 +1,6 @@
 package br.com.roomreserve.model;
 
+import br.com.roomreserve.dto.request.SalaRequestDTO;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -20,11 +21,10 @@ public class Sala {
     public Sala() {
     }
 
-
-    public Sala(String nome, Integer capacidade) {
-        this.nome = nome;
-        this.capacidade = capacidade;
-        this.ativo = true;
+    public Sala(SalaRequestDTO requestDTO) {
+        this.nome = requestDTO.nome();
+        this.capacidade = requestDTO.capacidade();
+        this.ativo = requestDTO.ativo();
     }
 
     public Long getId() {
