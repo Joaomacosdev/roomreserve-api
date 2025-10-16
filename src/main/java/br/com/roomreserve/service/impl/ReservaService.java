@@ -31,11 +31,18 @@ public class ReservaService implements br.com.roomreserve.service.ReservaService
     @Override
     @Transactional
     public ReservaResponseDTO cadastrarReserva(ReservaRequestDTO requestDTO) {
-        Sala sala = salaRepository.findById(requestDTO.salaId()).orElseThrow(() -> new ReservaInvalidaException("Sala não encontrada"));
-        Usuario usuario = usuarioRepository.findById(requestDTO.usuarioId()).orElseThrow(() -> new ReservaInvalidaException("usuário não encontrada"));
-        validarReserva(sala, requestDTO.inicio(), requestDTO.fim());
 
-        var reserva = reservaRepository.save(new Reserva(requestDTO));
+        var reserva = new Reserva(requestDTO);
+
+        Sala sala = salaRepository.findById(requestDTO.salaId()).orElseThrow(() -> new ReservaInvalidaException("Sala não encontrada"));
+        reserva.setSala(sala);
+        Usuario usuario = usuarioRepository.findById(requestDTO.usuarioId()).orElseThrow(() -> new ReservaInvalidaException("usuário não encontrada"));
+        reserva.setUsuario(usuario);
+        validarReserva(sala, requestDTO.inicio(), requestDTO.fim());
+        validarCapacidade(sala);
+        reduzirCapacidadeDaSala(sala);
+
+         reservaRepository.save(reserva);
         return new ReservaResponseDTO(reserva);
     }
 
@@ -52,6 +59,19 @@ public class ReservaService implements br.com.roomreserve.service.ReservaService
             throw new ReservaInvalidaException("Não é possível reservar uma sala inativa");
 
         }
+    }
+
+    private void validarCapacidade(Sala sala) {
+        if (sala.getCapacidade() <= 0) {
+            throw new ReservaInvalidaException(
+                    "A sala não possui mais vagas disponíveis. Capacidade atual: " + sala.getCapacidade()
+            );
+        }
+    }
+
+    private void reduzirCapacidadeDaSala(Sala sala) {
+        sala.setCapacidade(sala.getCapacidade() - 1);
+        salaRepository.save(sala);
     }
 
 

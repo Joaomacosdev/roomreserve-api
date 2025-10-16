@@ -1,5 +1,6 @@
 package br.com.roomreserve.model;
 
+import br.com.roomreserve.dto.request.UsuarioRequestDTO;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -24,10 +25,10 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nome, String email, String telefone) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
+    public Usuario(UsuarioRequestDTO requestDTO) {
+        this.nome = requestDTO.nome();
+        this.email = requestDTO.email();
+        this.telefone = requestDTO.telefone();
     }
 
     public Long getId() {

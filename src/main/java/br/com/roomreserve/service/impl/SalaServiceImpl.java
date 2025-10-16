@@ -7,6 +7,7 @@ import br.com.roomreserve.model.Sala;
 import br.com.roomreserve.repository.SalaRepository;
 import br.com.roomreserve.service.SalaService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SalaServiceImpl implements SalaService {
@@ -18,6 +19,7 @@ public class SalaServiceImpl implements SalaService {
     }
 
     @Override
+    @Transactional
     public SalaResponseDTO cadastrarSala(SalaRequestDTO requestDTO) {
         validaSala(requestDTO);
 
