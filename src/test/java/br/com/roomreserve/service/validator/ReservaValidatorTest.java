@@ -16,7 +16,7 @@ class ReservaValidatorTest {
 
 
     @Test
-    void cenarioSalaInativa() {
+    void cenarioValidarReserva() {
 
         ReservaRepository reservaRepository = Mockito.mock(ReservaRepository.class);
 
