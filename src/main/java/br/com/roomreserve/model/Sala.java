@@ -1,6 +1,7 @@
 package br.com.roomreserve.model;
 
 import br.com.roomreserve.dto.request.SalaRequestDTO;
+import br.com.roomreserve.infra.exception.ReservaInvalidaException;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -26,6 +27,29 @@ public class Sala {
         this.capacidade = requestDTO.capacidade();
         this.ativo = requestDTO.ativo();
     }
+
+
+
+    public void validarCapacidade() {
+        if (capacidade <= 0) {
+            throw new ReservaInvalidaException(
+                    "A sala não possui mais vagas disponíveis. Capacidade atual: " +capacidade
+            );
+        }
+    }
+
+    public void reduzirCapacidade() {
+        if (this.capacidade == null) {
+            throw new IllegalStateException("Capacidade da sala não definida.");
+        }
+
+        if (this.capacidade <= 0) {
+            throw new ReservaInvalidaException("A sala está lotada. Não é possível reservar mais lugares.");
+        }
+
+        this.capacidade -= 1;
+    }
+
 
     public Long getId() {
         return id;
