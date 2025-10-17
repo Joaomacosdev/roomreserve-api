@@ -1,6 +1,7 @@
 package br.com.roomreserve.model;
 
 import br.com.roomreserve.dto.request.SalaRequestDTO;
+import br.com.roomreserve.dto.request.SalaUpdateRequestDTO;
 import br.com.roomreserve.infra.exception.ReservaInvalidaException;
 import jakarta.persistence.*;
 
@@ -25,30 +26,32 @@ public class Sala {
     public Sala(SalaRequestDTO requestDTO) {
         this.nome = requestDTO.nome();
         this.capacidade = requestDTO.capacidade();
-        this.ativo = requestDTO.ativo();
+        this.ativo = true;
     }
 
 
-
-    public void validarCapacidade() {
-        if (capacidade <= 0) {
-            throw new ReservaInvalidaException(
-                    "A sala não possui mais vagas disponíveis. Capacidade atual: " +capacidade
-            );
+    public void atualizarDados(SalaUpdateRequestDTO requestDTO) {
+        if (requestDTO.nome() != null) {
+            this.nome = requestDTO.nome();
+        }
+        if (requestDTO.capacidade() != null) {
+            this.capacidade = requestDTO.capacidade();
+        }
+        if (requestDTO.ativo() != null) {
+            this.ativo = requestDTO.ativo();
         }
     }
 
-    public void reduzirCapacidade() {
-        if (this.capacidade == null) {
-            throw new IllegalStateException("Capacidade da sala não definida.");
-        }
-
-        if (this.capacidade <= 0) {
-            throw new ReservaInvalidaException("A sala está lotada. Não é possível reservar mais lugares.");
-        }
-
-        this.capacidade -= 1;
+    public void desativarSala() {
+        this.ativo = false;
     }
+
+
+    public void ativarSala() {
+        this.ativo = true;
+    }
+
+
 
 
     public Long getId() {
@@ -99,4 +102,6 @@ public class Sala {
     public int hashCode() {
         return Objects.hashCode(getId());
     }
+
+
 }

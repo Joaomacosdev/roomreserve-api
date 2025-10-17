@@ -1,9 +1,6 @@
 package br.com.roomreserve.infra.exception.handle;
 
-import br.com.roomreserve.infra.exception.EmailJaCadastradoException;
-import br.com.roomreserve.infra.exception.ExceptionResponse;
-import br.com.roomreserve.infra.exception.ReservaInvalidaException;
-import br.com.roomreserve.infra.exception.SalaInvalidaException;
+import br.com.roomreserve.infra.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -59,5 +56,28 @@ public class CustomEntityResponseHandle {
         );
 
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+
+    @ExceptionHandler(NomeJaCadastradoException.class)
+    public ResponseEntity<ExceptionResponse> nomeJaCadastradoException(Exception ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionResponse> notFoundException(Exception ex, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

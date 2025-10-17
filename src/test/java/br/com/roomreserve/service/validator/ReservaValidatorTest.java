@@ -16,7 +16,7 @@ class ReservaValidatorTest {
 
 
     @Test
-    void cenarioValidarReserva() {
+    void cenarioValidarReservaQuandoInicioDepoisDoFim() {
 
         ReservaRepository reservaRepository = Mockito.mock(ReservaRepository.class);
 
@@ -28,10 +28,37 @@ class ReservaValidatorTest {
         LocalDate inicio = LocalDate.now().plusDays(3);
         LocalDate fim = LocalDate.now().plusDays(2);
 
-        Assertions.assertThrows(ReservaInvalidaException.class, () -> {
-            reservaValidator.validarReserva(sala, inicio, fim);
-        });
+        ReservaInvalidaException ex = Assertions.assertThrows(
+                ReservaInvalidaException.class,
+                () -> reservaValidator.validarReserva(sala, inicio, fim)
+        );
+
+        Assertions.assertEquals("A data de início deve ser anterior à data de fim da reserva.", ex.getMessage());
     }
+
+    @Test
+    void cenarioValidarReservaSemCapacidade() {
+
+        ReservaRepository reservaRepository = Mockito.mock(ReservaRepository.class);
+
+        ReservaValidator reservaValidator = new ReservaValidator(reservaRepository);
+
+        SalaRequestDTO requestDTO = new SalaRequestDTO("João", 0, true);
+        Sala sala = new Sala(requestDTO);
+
+        LocalDate inicio = LocalDate.now().plusDays(2);
+        LocalDate fim = LocalDate.now().plusDays(3);
+
+        ReservaInvalidaException ex = Assertions.assertThrows(
+                ReservaInvalidaException.class,
+                () -> reservaValidator.validarReserva(sala, inicio, fim)
+        );
+
+        Assertions.assertEquals("A sala está lotada. Não há capacidade disponível.", ex.getMessage());
+
+    }
+
+
 
     @Test
     void cenarioVerificarConflito() {

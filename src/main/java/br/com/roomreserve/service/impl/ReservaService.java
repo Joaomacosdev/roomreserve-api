@@ -10,6 +10,7 @@ import br.com.roomreserve.repository.ReservaRepository;
 import br.com.roomreserve.repository.SalaRepository;
 import br.com.roomreserve.repository.UsuarioRepository;
 import br.com.roomreserve.service.validator.ReservaValidator;
+import br.com.roomreserve.service.validator.SalaValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +21,14 @@ public class ReservaService implements br.com.roomreserve.service.ReservaService
     private final SalaRepository salaRepository;
     private final UsuarioRepository usuarioRepository;
     private final ReservaValidator reservaValidator;
+    private final SalaValidator salaValidator;
 
-    public ReservaService(ReservaRepository reservaRepository, SalaRepository salaRepository, UsuarioRepository usuarioRepository, ReservaValidator reservaValidator) {
+    public ReservaService(ReservaRepository reservaRepository, SalaRepository salaRepository, UsuarioRepository usuarioRepository, ReservaValidator reservaValidator, SalaValidator salaValidator) {
         this.reservaRepository = reservaRepository;
         this.salaRepository = salaRepository;
         this.usuarioRepository = usuarioRepository;
         this.reservaValidator = reservaValidator;
+        this.salaValidator = salaValidator;
     }
 
 
@@ -40,8 +43,8 @@ public class ReservaService implements br.com.roomreserve.service.ReservaService
 
         reservaValidator.verificarConflito(sala, requestDTO.inicio(), requestDTO.fim());
         reservaValidator.validarReserva(sala, requestDTO.inicio(), requestDTO.fim());
-        sala.validarCapacidade();
-        sala.reduzirCapacidade();
+        salaValidator.validarCapacidade(sala);
+        salaValidator.reduzirCapacidade(sala);
 
         var reserva = new Reserva(requestDTO);
         reserva.setSala(sala);
