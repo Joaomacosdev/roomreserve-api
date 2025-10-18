@@ -52,8 +52,6 @@ public class Sala {
     }
 
 
-
-
     public Long getId() {
         return id;
     }

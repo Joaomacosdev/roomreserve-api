@@ -1,6 +1,7 @@
 package br.com.roomreserve.model;
 
 import br.com.roomreserve.dto.request.UsuarioRequestDTO;
+import br.com.roomreserve.dto.request.UsuarioUpdateRequestDTO;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -22,6 +23,8 @@ public class Usuario {
     @Column(length = 30)
     private String telefone;
 
+    private Boolean ativo;
+
     public Usuario() {
     }
 
@@ -29,6 +32,27 @@ public class Usuario {
         this.nome = requestDTO.nome();
         this.email = requestDTO.email();
         this.telefone = requestDTO.telefone();
+        this.ativo = true;
+    }
+
+    public void atualizarDados(UsuarioUpdateRequestDTO requestDTO) {
+        if (requestDTO.nome() != null){
+            this.nome =requestDTO.nome();
+        }
+        if (requestDTO.email() != null){
+            this.email =requestDTO.email();
+        }
+        if (requestDTO.telefone() != null){
+            this.telefone =requestDTO.telefone();
+        }
+    }
+
+    public void ativarUsuario() {
+        this.ativo = true;
+    }
+
+    public void desativarUsuario() {
+        this.ativo = false;
     }
 
     public Long getId() {
@@ -67,6 +91,15 @@ public class Usuario {
         return this;
     }
 
+    public Boolean istAtivo() {
+        return ativo;
+    }
+
+    public Usuario setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+        return this;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -79,4 +112,6 @@ public class Usuario {
     public int hashCode() {
         return Objects.hashCode(getId());
     }
+
+
 }
